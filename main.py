@@ -11,6 +11,7 @@ import sys
 
 ENTRY = "You ring at 6 AM on a Saturday \u2014 the only thing you have ever woken up is my hatred for you."
 MAX_CHARS = 200
+MAX_BYTES = 800
 
 
 def validate(text):
@@ -19,6 +20,8 @@ def validate(text):
         return "entry is empty or whitespace-only"
     if len(text) > MAX_CHARS:
         return "entry is %d chars, over the %d cap" % (len(text), MAX_CHARS)
+    if len(text.encode("utf-8", "surrogatepass")) > MAX_BYTES:
+        return "entry is %d bytes, over the %d-byte cap" % (len(text.encode("utf-8", "surrogatepass")), MAX_BYTES)
     if "\n" in text or "\r" in text:
         return "entry must be a single line"
     if any(ord(c) < 0x20 or ord(c) == 0x7F for c in text):
